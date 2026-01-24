@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { OrdersTable } from '@/components/orders/orders-table';
-import { mockOrders, mockOrderTimeline } from '@/lib/mock/order';
+import { mockOrders } from '@/lib/mock/order';
 
 const orderStatusData = [
   { name: 'Pending', value: 45 },
@@ -11,8 +11,8 @@ const orderStatusData = [
 
 export default function OrdersPage() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Order Management</h1>
+    <div className="space-y-6 w-full max-w-7xl mx-auto p-3 md:p-4">
+      <h1 className="text-2xl pt-3 font-bold">Order Management</h1>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {orderStatusData.map((status) => (
@@ -23,7 +23,7 @@ export default function OrdersPage() {
         ))}
       </div>
 
-      <OrdersTable orders={mockOrders} timeline={mockOrderTimeline} />
+      <OrdersTable orders={mockOrders} />
     </div>
   );
 }

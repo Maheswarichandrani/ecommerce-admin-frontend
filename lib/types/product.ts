@@ -1,3 +1,5 @@
+export type RootType = 'men' | 'women' | 'kids';
+
 export interface Product {
   id: string;
   name: string;
@@ -48,5 +50,15 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
+  description?: string;
+  rootType: RootType;
   parentId: string | null;
+  imageUrl?: string;
+  isActive: boolean;
+  productCount: number;
+  order: number;
+  level: number;
+  children?: Category[];
+  createdAt: string;
+  updatedAt: string;
 }

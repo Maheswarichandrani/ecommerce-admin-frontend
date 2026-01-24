@@ -10,7 +10,7 @@ import { mockOrders } from '@/lib/mock/order';
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-3">
         <h1 className="text-3xl font-bold">Dashboard Overview</h1>
         <Button>
           <Download className="w-4 h-4 mr-2" />

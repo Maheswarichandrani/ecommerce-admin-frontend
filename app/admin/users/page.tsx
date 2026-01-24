@@ -1,8 +1,8 @@
 'use client'
 
-import { Users } from 'lucide-react';
-import { EmptyState } from '@/components/common/empty-state';
+import { UsersTable } from '@/components/users/users-table';
+import { mockUsers } from '@/lib/mock/users';
 
 export default function UsersPage() {
-  return <EmptyState icon={Users} title="Users" description="This section is under construction" />;
+  return <UsersTable users={mockUsers} />;
 }

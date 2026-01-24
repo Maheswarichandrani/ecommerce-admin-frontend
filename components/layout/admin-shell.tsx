@@ -1,25 +1,25 @@
 'use client';
 
-import { useState } from "react";
-import { Sidebar } from "@/components/layout/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
 import { TopBar } from '@/components/layout/topbar';
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
 
 interface AdminShellProps {
   children: React.ReactNode;
 }
 
 export function AdminShell({ children }: AdminShellProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
   return (
-    <div className="admin-layout dark">
-      <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
-
-      <div className={`admin-main ${sidebarCollapsed ? 'admin-main-collapsed' : ''}`}>
-        <TopBar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
-        <div className="admin-content">{children}</div>
-      </div>
-    </div>
+    <>
+      <AppSidebar />
+      <SidebarInset>
+        <TopBar />
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          {children}
+        </div>
+      </SidebarInset>
+    </>
   );
 }
 

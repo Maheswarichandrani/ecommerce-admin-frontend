@@ -41,10 +41,10 @@ export function VariantForm({
   canRemove,
 }: VariantFormProps) {
   return (
-    <Card className="border-border">
-      <CardHeader className="flex flex-row items-center justify-between pb-3">
-        <CardTitle className="text-sm font-semibold">
-          Variant
+    <Card className="border border-border shadow-sm hover:shadow-md transition-shadow bg-card">
+      <CardHeader className="flex flex-row items-center justify-between pb-4 space-y-0 bg-muted/40 border-b">
+        <CardTitle className="text-base font-semibold text-foreground">
+          Variant Configuration
         </CardTitle>
 
         {canRemove && (
@@ -53,20 +53,20 @@ export function VariantForm({
             size="icon"
             type="button"
             onClick={onRemove}
-            className="h-8 w-8"
+            className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive transition-colors"
           >
-            <Trash2 className="w-4 h-4 text-muted-foreground hover:text-destructive" />
+            <Trash2 className="w-4 h-4" />
           </Button>
         )}
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         {/* Variant fields */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Size */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium uppercase text-muted-foreground">
-              Size
+            <Label className="text-sm font-medium">
+              Size <span className="text-destructive">*</span>
             </Label>
             <Select
               value={value.size}
@@ -74,11 +74,11 @@ export function VariantForm({
                 onChange({ ...value, size })
               }
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select size" />
               </SelectTrigger>
               <SelectContent>
-                {['xs', 's', 'm', 'l', 'xl', 'xxl'].map((s) => (
+                {['xs', 's', 'm', 'l', 'xl', 'xxl', '3xl'].map((s) => (
                   <SelectItem key={s} value={s}>
                     {s.toUpperCase()}
                   </SelectItem>
@@ -89,8 +89,8 @@ export function VariantForm({
 
           {/* Color */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium uppercase text-muted-foreground">
-              Color
+            <Label className="text-sm font-medium">
+              Color <span className="text-destructive">*</span>
             </Label>
             <div className="flex items-center gap-2">
               <input
@@ -99,7 +99,7 @@ export function VariantForm({
                 onChange={(e) =>
                   onChange({ ...value, colorHex: e.target.value })
                 }
-                className="w-10 h-10 rounded-md border cursor-pointer"
+                className="w-12 h-10 rounded-md border border-border cursor-pointer bg-background"
               />
               <Input
                 placeholder="Color name"
@@ -107,14 +107,15 @@ export function VariantForm({
                 onChange={(e) =>
                   onChange({ ...value, color: e.target.value })
                 }
+                className="h-10"
               />
             </div>
           </div>
 
           {/* Stock */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium uppercase text-muted-foreground">
-              Stock
+            <Label className="text-sm font-medium">
+              Stock Quantity <span className="text-destructive">*</span>
             </Label>
             <Input
               type="number"
@@ -123,20 +124,22 @@ export function VariantForm({
               onChange={(e) =>
                 onChange({ ...value, stock: Number(e.target.value) })
               }
+              className="h-10"
             />
           </div>
 
           {/* SKU */}
           <div className="space-y-2">
-            <Label className="text-xs font-medium uppercase text-muted-foreground">
-              SKU
+            <Label className="text-sm font-medium">
+              Variant SKU <span className="text-destructive">*</span>
             </Label>
             <Input
-              placeholder="VAR-SKU"
+              placeholder="VAR-SKU-001"
               value={value.sku}
               onChange={(e) =>
                 onChange({ ...value, sku: e.target.value })
               }
+              className="h-10 font-mono"
             />
           </div>
         </div>

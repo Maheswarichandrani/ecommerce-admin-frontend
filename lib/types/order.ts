@@ -12,6 +12,14 @@ export interface Order {
   itemCount: number;
   items?: OrderItem[];
   shippingAddress?: Address;
+  billingAddress?: Address;
+  paymentMethod?: string;
+  email?: string;
+  subtotal?: number;
+  shipping?: number;
+  cancellationReason?: string;
+  cancelledAt?: string;
+  cancelledBy?: string;
 }
 
 export interface OrderItem {
@@ -24,11 +32,13 @@ export interface OrderItem {
 }
 
 export interface Address {
+  name: string;
   street: string;
   city: string;
   state: string;
   zipCode: string;
   country: string;
+  apartment?: string;
 }
 
 export interface OrderTimeline {

@@ -1,16 +1,19 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Save, Loader2, Upload, ImageIcon } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Save, Loader2, Upload, X, Image as ImageLucide } from 'lucide-react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { Category, CategoryFormData, FormMode, RootType } from '@/lib/types/category';
 import { generateSlug, flattenCategories } from '@/lib/utils';
+import { AssetLibraryModal } from '@/components/products/asset-library-modal';
+import { mockAssets } from '@/lib/mock/assets';
 import Image from 'next/image';
 
 interface CategoryFormProps {
@@ -23,14 +26,14 @@ interface CategoryFormProps {
   isSubmitting?: boolean;
 }
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({ 
-  mode, 
-  initialData, 
-  parentCategory, 
-  allCategories, 
-  onSubmit, 
-  onCancel, 
-  isSubmitting 
+export const CategoryForm: React.FC<CategoryFormProps> = ({
+  mode,
+  initialData,
+  parentCategory,
+  allCategories,
+  onSubmit,
+  onCancel,
+  isSubmitting
 }) => {
   const [formData, setFormData] = useState<CategoryFormData>({
     name: initialData?.name || '',
@@ -41,6 +44,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     imageUrl: initialData?.imageUrl,
     isActive: initialData?.isActive ?? true,
   });
+
+  const [showAssetModal, setShowAssetModal] = useState(false);
 
   const flatCategories = useMemo(() => flattenCategories(allCategories), [allCategories]);
   const availableParents = flatCategories.filter(c =>
@@ -55,13 +60,10 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     }));
   };
 
-  const handleImageUpload = () => {
-    const urls = [
-      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400',
-      'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400',
-      'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400',
-    ];
-    setFormData(prev => ({ ...prev, imageUrl: urls[Math.floor(Math.random() * urls.length)] }));
+  const handleImageSelect = (selectedAssets: typeof mockAssets) => {
+    if (selectedAssets.length > 0) {
+      setFormData(prev => ({ ...prev, imageUrl: selectedAssets[0].url }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -69,191 +71,273 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     onSubmit(formData);
   };
 
-  const getTitle = () => {
-    if (mode === 'create') return 'Create New Category';
-    if (mode === 'create-sub') return `Add Sub-Category`;
-    return 'Edit Category';
-  };
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{getTitle()}</CardTitle>
-        {mode === 'create-sub' && parentCategory && (
-          <CardDescription>
-            Parent: {parentCategory.name} ({parentCategory.rootType})
-          </CardDescription>
-        )}
-      </CardHeader>
-
-      <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-          <div className="space-y-2">
-            <Label htmlFor="name">
-              Category Name <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => handleNameChange(e.target.value)}
-              placeholder="e.g., Shirts, Dresses, Jeans"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="slug">
-              Slug <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="slug"
-              value={formData.slug}
-              onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-              placeholder="category-url-slug"
-              className="font-mono"
-              required
-            />
-            <p className="text-xs text-muted-foreground">URL-friendly identifier (auto-generated)</p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="rootType">
-              Root Type <span className="text-destructive">*</span>
-            </Label>
-            <Select
-              value={formData.rootType}
-              onValueChange={(value: RootType) => setFormData(prev => ({ ...prev, rootType: value, parentId: null }))}
-              disabled={mode === 'create-sub'}
-            >
-              <SelectTrigger id="rootType">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="men">Men</SelectItem>
-                <SelectItem value="women">Women</SelectItem>
-                <SelectItem value="kids">Kids</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-muted-foreground">
-              {mode === 'create-sub' ? 'Inherited from parent category' : 'Main category type'}
-            </p>
-          </div>
-
-          {mode !== 'create-sub' && (
-            <div className="space-y-2">
-              <Label htmlFor="parentId">Parent Category</Label>
-              <Select
-                value={formData.parentId || 'none'}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, parentId: value === 'none' ? null : value }))}
-              >
-                <SelectTrigger id="parentId">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">None (Root Category)</SelectItem>
-                  {availableParents.map(cat => (
-                    <SelectItem key={cat.id} value={cat.id}>
-                      {cat.name} {cat.level > 0 ? `(Level ${cat.level})` : ''}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">Leave as None for top-level category</p>
-            </div>
-          )}
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              placeholder="Brief description of this category..."
-              rows={3}
-              className="resize-none"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Category Image</Label>
-            <div
-              className={`relative w-full aspect-video rounded-lg border-2 border-dashed ${formData.imageUrl ? 'border-border' : 'border-border hover:border-primary'} bg-muted/30 flex items-center justify-center cursor-pointer transition-all overflow-hidden`}
-              onClick={handleImageUpload}
-            >
-              {formData.imageUrl ? (
-                <>
-                  <Image src={formData.imageUrl} alt="Category" width={800} height={600} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-all flex items-center justify-center opacity-0 hover:opacity-100">
-                    <div className="text-white text-center">
-                      <Upload className="w-8 h-8 mx-auto mb-2" />
-                      <span className="text-sm font-medium">Change Image</span>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="text-center">
-                  <ImageIcon className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-sm font-medium">Click to upload</p>
-                  <p className="text-xs text-muted-foreground mt-1">Recommended: 800x600px</p>
-                </div>
+    <>
+      <Card className="w-full max-w-6xl mx-auto shadow-sm">
+        {/* <CardHeader className="space-y-3 pb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              {mode === 'create-sub' && parentCategory && (
+                <CardDescription className="text-base mt-2">
+                  Parent category: <span className="font-semibold text-foreground">{parentCategory.name}</span> <span className="text-muted-foreground">({parentCategory.rootType})</span>
+                </CardDescription>
               )}
             </div>
-            {formData.imageUrl && (
+          </div>
+        </CardHeader> */}
+
+        <form onSubmit={handleSubmit}>
+          <CardContent className="pt-8 pb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Left Column - Basic Info */}
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <div className="w-1 h-5 bg-primary rounded-full"></div>
+                    Basic Information
+                  </h3>
+                  <div className="space-y-5">
+                    <div className="space-y-2.5">
+                      <Label htmlFor="name" className="text-sm font-medium">
+                        Category Name <span className="text-destructive">*</span>
+                      </Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => handleNameChange(e.target.value)}
+                        placeholder="e.g., Shirts, Dresses, Jeans"
+                        className="h-11 text-base"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2.5">
+                      <Label htmlFor="slug" className="text-sm font-medium">
+                        URL Slug <span className="text-destructive">*</span>
+                      </Label>
+                      <Input
+                        id="slug"
+                        value={formData.slug}
+                        onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                        placeholder="category-url-slug"
+                        className="font-mono h-11 text-base"
+                        required
+                      />
+                      <p className="text-xs text-muted-foreground">Auto-generated from name, used in URLs</p>
+                    </div>
+
+                    <div className="space-y-2.5">
+                      <Label htmlFor="description" className="text-sm font-medium">
+                        Description
+                      </Label>
+                      <Textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                        placeholder="Brief description of this category..."
+                        rows={5}
+                        className="resize-none text-base"
+                      />
+                      <p className="text-xs text-muted-foreground">Optional description for better SEO</p>
+                    </div>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <div className="w-1 h-5 bg-primary rounded-full"></div>
+                    Category Settings
+                  </h3>
+                  <div className="space-y-5">
+                    <div className="space-y-2.5">
+                      <Label htmlFor="rootType" className="text-sm font-medium">
+                        Root Type <span className="text-destructive">*</span>
+                      </Label>
+                      <Select
+                        value={formData.rootType}
+                        onValueChange={(value: RootType) => setFormData(prev => ({ ...prev, rootType: value, parentId: null }))}
+                        disabled={mode === 'create-sub'}
+                      >
+                        <SelectTrigger id="rootType" className="h-11 text-base">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="men">Mens Collection</SelectItem>
+                          <SelectItem value="women">Womens Collection</SelectItem>
+                          <SelectItem value="kids">Kids Collection</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground">
+                        {mode === 'create-sub' ? 'Inherited from parent category' : 'Main category type for filtering products'}
+                      </p>
+                    </div>
+
+                    {mode !== 'create-sub' && (
+                      <div className="space-y-2.5">
+                        <Label htmlFor="parentId" className="text-sm font-medium">
+                          Parent Category
+                        </Label>
+                        <Select
+                          value={formData.parentId || 'none'}
+                          onValueChange={(value) => setFormData(prev => ({ ...prev, parentId: value === 'none' ? null : value }))}
+                        >
+                          <SelectTrigger id="parentId" className="h-11 text-base">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">None (Root Category)</SelectItem>
+                            {availableParents.map(cat => (
+                              <SelectItem key={cat.id} value={cat.id}>
+                                {'└─ '.repeat(cat.level)}{cat.name} {cat.level > 0 ? `(Level ${cat.level})` : ''}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <p className="text-xs text-muted-foreground">Select None for top-level category</p>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between p-4 border rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="isActive" className="text-sm font-medium cursor-pointer">
+                          Active Status
+                        </Label>
+                        <p className="text-xs text-muted-foreground">
+                          Inactive categories wont appear on the website
+                        </p>
+                      </div>
+                      <Switch
+                        id="isActive"
+                        checked={formData.isActive}
+                        onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isActive: checked }))}
+                        className="data-[state=checked]:bg-green-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column - Image */}
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <div className="w-1 h-5 bg-primary rounded-full"></div>
+                    Category Image
+                  </h3>
+                  <div className="space-y-4">
+                    {formData.imageUrl ? (
+                      <div className="relative group">
+                        <div className="relative aspect-[4/3] rounded-xl overflow-hidden border-2 border-border bg-muted">
+                          <Image
+                            src={formData.imageUrl}
+                            alt="Category"
+                            width={800}
+                            height={600}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-3">
+                            <Button
+                              type="button"
+                              variant="secondary"
+                              size="lg"
+                              onClick={() => setShowAssetModal(true)}
+                              className="gap-2 shadow-lg"
+                            >
+                              <ImageLucide className="w-5 h-5" />
+                              Change
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="lg"
+                              onClick={() => setFormData(prev => ({ ...prev, imageUrl: undefined }))}
+                              className="gap-2 shadow-lg"
+                            >
+                              <X className="w-5 h-5" />
+                              Remove
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className="relative aspect-[4/3] rounded-xl border-2 border-dashed border-muted-foreground/25 hover:border-primary/50 bg-muted/30 hover:bg-muted/50 flex items-center justify-center cursor-pointer transition-all group"
+                        onClick={() => setShowAssetModal(true)}
+                      >
+                        <div className="text-center p-8">
+                          <div className="w-20 h-20 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center mx-auto mb-4 transition-colors">
+                            <Upload className="w-10 h-10 text-primary" />
+                          </div>
+                          <p className="text-lg font-semibold mb-2">Click to select an image</p>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            Choose from asset library or upload new
+                          </p>
+                          <p className="text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-full inline-block">
+                            Recommended: 800x600px or higher
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg p-4">
+                      <p className="text-sm text-blue-900 dark:text-blue-100">
+                        <strong>💡 Tip:</strong> High-quality images help customers better understand your category and improve engagement.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+
+          <Separator />
+
+          <CardFooter className="flex items-center justify-between gap-4 py-6">
+            <div className="text-sm text-muted-foreground">
+              <span className="text-destructive">*</span> Required fields
+            </div>
+            <div className="flex gap-3">
               <Button
                 type="button"
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setFormData(prev => ({ ...prev, imageUrl: undefined }));
-                }}
-                className="text-xs text-destructive hover:text-destructive"
+                variant="outline"
+                onClick={onCancel}
+                disabled={isSubmitting}
+                size="lg"
+                className="min-w-[120px]"
               >
-                Remove Image
+                Cancel
               </Button>
-            )}
-          </div>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !formData.name || !formData.slug}
+                size="lg"
+                className=" gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-5 h-5" />
+                    {mode === 'edit' ? 'Update Category' : 'Create Category'}
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardFooter>
+        </form>
+      </Card>
 
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="isActive"
-              checked={formData.isActive}
-              onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isActive: checked }))}
-            />
-            <Label htmlFor="isActive" className="cursor-pointer">
-              Active
-            </Label>
-          </div>
-          <p className="text-xs text-muted-foreground">Inactive categories wont appear on the website</p>
-        </CardContent>
-
-        <CardFooter className="flex justify-end gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            disabled={isSubmitting || !formData.name || !formData.slug}
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                {mode === 'edit' ? 'Update' : 'Create'}
-              </>
-            )}
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+      <AssetLibraryModal
+        open={showAssetModal}
+        onOpenChange={setShowAssetModal}
+        assets={mockAssets}
+        onApply={handleImageSelect}
+      />
+    </>
   );
-};
+}

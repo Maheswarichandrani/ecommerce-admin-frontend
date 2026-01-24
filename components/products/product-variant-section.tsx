@@ -2,9 +2,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Layers } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { VariantForm } from './variant-form';
 import { Product, ProductVariant } from '@/lib/types/product';
 import { Asset } from '@/lib/types/asset';
@@ -34,7 +35,7 @@ export function ProductVariantsSection({ assets, initialData }: ProductVariantsS
     return {
       size: '',
       color: '',
-      colorHex: '',
+      colorHex: '#000000',
       stock: 0,
       sku: '',
       images: [],
@@ -48,7 +49,7 @@ export function ProductVariantsSection({ assets, initialData }: ProductVariantsS
       colorHex: variant.colorHex,
       stock: variant.stock,
       sku: variant.sku,
-      images: [], // map ProductImage → Asset later if needed
+      images: [],
     };
   }
 
@@ -68,21 +69,33 @@ export function ProductVariantsSection({ assets, initialData }: ProductVariantsS
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle>Product Variants</CardTitle>
-          <CardDescription>
+    <Card className="border border-border shadow-sm bg-card">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-5 bg-muted/40">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-xl font-semibold text-foreground">Product Variants</CardTitle>
+            <Badge variant="secondary" className="text-xs font-medium">
+              <Layers className="w-3 h-3 mr-1" />
+              {variants.length} {variants.length === 1 ? 'Variant' : 'Variants'}
+            </Badge>
+          </div>
+          <CardDescription className="text-sm text-muted-foreground">
             Manage sizes, colors, inventory, and images per variant
           </CardDescription>
         </div>
-        <Button type="button" variant="outline" size="sm" onClick={handleAddVariant}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleAddVariant}
+          className="hover:bg-primary hover:text-primary-foreground transition-all shadow-sm h-9"
+        >
           <Plus className="w-4 h-4 mr-2" />
           Add Variant
         </Button>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 pt-3">
         {variants.map((variant, index) => (
           <VariantForm
             key={index}

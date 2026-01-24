@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Oswald, Scheherazade_New } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 import "./globals.css";
 
@@ -29,11 +31,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${scheherazade.variable} antialiased ${montserrat.variable}`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+        >
+          <SidebarProvider defaultOpen={false}>
+            {children}
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

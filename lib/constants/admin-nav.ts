@@ -12,7 +12,7 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard', section: 'dashboard' },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/admin', section: 'dashboard' },
   { icon: Package, label: 'Products', path: '/admin/products', section: 'products', children: [{ icon: Package, label: 'All Products', path: '/admin/products' }, { icon: Package, label: 'Add Product', path: '/admin/products/add'}] },
   { icon: FolderTree, label: 'Categories', path: '/admin/categories', section: 'categories' },
   { icon: ShoppingCart, label: 'Orders', path: '/admin/orders', section: 'orders' },

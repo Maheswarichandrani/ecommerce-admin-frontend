@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronRight, Edit2, Eye, EyeOff, FolderTree, Plus, Trash2, Package } from 'lucide-react';
+import { ChevronRight, Edit2, Eye, EyeOff, FolderTree, Plus, Trash2, Package, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Category } from '@/lib/types/category';
 import { getRootTypeColor } from '@/lib/utils';
+import Image from 'next/image';
 
 interface CategoryNodeProps {
   category: Category;
@@ -14,89 +15,80 @@ interface CategoryNodeProps {
   onAddSub: (category: Category) => void;
   onDelete: (id: string) => void;
   onToggleActive: (id: string) => void;
-  selectedId?: string;
 }
 
-export const CategoryNode: React.FC<CategoryNodeProps> = ({ 
-  category, 
-  onEdit, 
-  onAddSub, 
-  onDelete, 
-  onToggleActive, 
-  selectedId 
+export const CategoryNode: React.FC<CategoryNodeProps> = ({
+  category,
+  onEdit,
+  onAddSub,
+  onDelete,
+  onToggleActive
 }) => {
   const [isExpanded, setIsExpanded] = useState(category.level === 0);
   const hasChildren = category.children && category.children.length > 0;
 
   return (
     <div className="space-y-1">
-      <div 
-        className={`
-          flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer
-          ${selectedId === category.id 
-            ? 'bg-zinc-800 border border-zinc-700' 
-            : 'hover:bg-zinc-800 border border-transparent'
-          }
-        `}
-        onClick={() => onEdit(category)}
+      <div
+        className="flex items-center gap-3 px-3 py-3 rounded-lg transition-all hover:bg-accent/50 border border-transparent group"
         style={{ marginLeft: `${category.level * 20}px` }}
       >
         {hasChildren ? (
           <Button
             variant="ghost"
             size="sm"
-            className="h-5 w-5 p-0 hover:bg-gray-700"
+            className="h-6 w-6 p-0 hover:bg-accent"
             onClick={(e) => {
               e.stopPropagation();
               setIsExpanded(!isExpanded);
             }}
           >
-            <ChevronRight className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+            <ChevronRight className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
           </Button>
         ) : (
-          <div className="w-5" />
+          <div className="w-6" />
         )}
 
-        <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted border">
+        <div className="w-14 h-14 rounded-lg overflow-hidden bg-muted border border-border">
           {category.imageUrl ? (
-            <img src={category.imageUrl} alt={category.name} className="w-full h-full object-cover" />
+            <Image src={category.imageUrl} alt={category.name} width={56} height={56} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <FolderTree className="w-5 h-5 text-muted-foreground" />
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary/5">
+              <FolderTree className="w-6 h-6 text-primary/50" />
             </div>
           )}
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="font-medium text-sm">{category.name}</div>
-          <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-xs text-muted-foreground">/{category.slug}</span>
+          <div className="font-semibold text-sm mb-1">{category.name}</div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground font-mono">/{category.slug}</span>
             <Badge variant="outline" className={`text-xs ${getRootTypeColor(category.rootType)}`}>
               {category.rootType}
             </Badge>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <Package className="w-3.5 h-3.5" />
-          <span>{category.productCount}</span>
+        <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-1.5 text-muted-foreground">
+            <Package className="w-4 h-4" />
+            <span className="font-medium">{category.productCount}</span>
+          </div>
+
+          <Badge variant={category.isActive ? 'default' : 'secondary'} className="font-medium">
+            {category.isActive ? 'Active' : 'Inactive'}
+          </Badge>
         </div>
 
-        <Badge variant={category.isActive ? 'default' : 'secondary'}>
-          {category.isActive ? 'Active' : 'Inactive'}
-        </Badge>
-
-        <div onClick={(e) => e.stopPropagation()}>
+        <div className="hover:bg-accent/50 transition-opacity cursor-pointer">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 cursor-pointer">
                 <span className="sr-only">Open menu</span>
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                  <path d="M3.625 7.5C3.625 8.12132 3.12132 8.625 2.5 8.625C1.87868 8.625 1.375 8.12132 1.375 7.5C1.375 6.87868 1.87868 6.375 2.5 6.375C3.12132 6.375 3.625 6.87868 3.625 7.5ZM8.625 7.5C8.625 8.12132 8.12132 8.625 7.5 8.625C6.87868 8.625 6.375 8.12132 6.375 7.5C6.375 6.87868 6.87868 6.375 7.5 6.375C8.12132 6.375 8.625 6.87868 8.625 7.5ZM12.5 8.625C13.1213 8.625 13.625 8.12132 13.625 7.5C13.625 6.87868 13.1213 6.375 12.5 6.375C11.8787 6.375 11.375 6.87868 11.375 7.5C11.375 8.12132 11.8787 8.625 12.5 8.625Z" fill="currentColor"/>
-                </svg>
+                <MoreHorizontal className="w-4 h-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="cursor-pointer">
               <DropdownMenuItem onClick={() => onEdit(category)}>
                 <Edit2 className="w-4 h-4 mr-2" />
                 Edit
@@ -129,7 +121,6 @@ export const CategoryNode: React.FC<CategoryNodeProps> = ({
               onAddSub={onAddSub}
               onDelete={onDelete}
               onToggleActive={onToggleActive}
-              selectedId={selectedId}
             />
           ))}
         </div>
