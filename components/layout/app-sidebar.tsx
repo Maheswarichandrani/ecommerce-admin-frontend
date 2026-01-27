@@ -22,7 +22,7 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { NAV_ITEMS } from "@/lib/constants/admin-nav";
+import { NAV_ITEMS } from "@/constants/admin-nav";
 import { ChevronRight } from "lucide-react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

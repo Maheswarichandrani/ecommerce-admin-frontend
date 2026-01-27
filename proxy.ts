@@ -6,6 +6,7 @@ export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   if (
     pathname.startsWith("/login") ||
+    pathname.startsWith("/verify-otp") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/favicon.ico") ||

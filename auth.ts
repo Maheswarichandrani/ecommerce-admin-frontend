@@ -1,14 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { z } from "zod";
-import { AuthResponse } from "./types/auth";
+import { otpSchema } from "./lib/validations";
+import { verifyOtp } from "./lib/actions/verify-otp";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
 
-const otpSchema = z.object({
-  phone: z.string().min(10).max(15, "Invalid phone number"),
-  otp: z.string().length(6, "OTP must be 6 digits"),
-});
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -21,28 +16,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const { phone, otp } = otpSchema.parse(credentials);
+          const { phone, otp } = await otpSchema.parseAsync(credentials);
 
-          const response = await fetch(`${API_URL}/auth/verify-otp`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ phone, otp }),
-          });
+          // Use the server action to verify OTP
+          const result = await verifyOtp({ phone, otp });
 
-          if (!response.ok) {
-            const error = await response.json().catch(() => ({ message: "Invalid OTP" }));
-            throw new Error(error.message || "Failed to verify OTP");
+          if (!result.success || !result.data) {
+            throw new Error(result.error || "Failed to verify OTP");
           }
 
-          const data: AuthResponse = await response.json();
-          const user = data.user;
-          const accessToken = data.accessToken; // Adjust according to your API response
-
-          if (!user || !accessToken) {
-            return null;
-          }
+          const { user, accessToken } = result.data;
 
           return {
             id: user.id,
@@ -64,6 +47,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
+
+
     async jwt({ token, user }) {
       // Initial sign in
       if (user) {
@@ -97,6 +82,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
+
+
   },
   pages: {
     signIn: "/login",
