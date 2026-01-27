@@ -29,7 +29,19 @@ export const mockProducts: Product[] = [
         images: []
       }
     ],
-    category: { id: 'cat-men', name: 'Men', slug: 'men', parentId: null }
+    category: {
+      id: 'cat-men',
+      name: 'Men',
+      slug: 'men',
+      parentId: null,
+      rootType: 'men',
+      isActive: true,
+      productCount: 100,
+      order: 1,
+      level: 1,
+      createdAt: '2024-01-01T00:00:00Z',
+      updatedAt: '2024-01-01T00:00:00Z'
+    }
   },
   {
     id: '2',
@@ -59,7 +71,19 @@ export const mockProducts: Product[] = [
         images: []
       }
     ],
-    category: { id: 'cat-women', name: 'Women', slug: 'women', parentId: null }
+    category: {
+      id: 'cat-women',
+      name: 'Women',
+      slug: 'women',
+      parentId: null,
+      rootType: 'women',
+      isActive: true,
+      productCount: 80,
+      order: 2,
+      level: 1,
+      createdAt: '2024-01-02T00:00:00Z',
+      updatedAt: '2024-01-02T00:00:00Z'
+    }
   },
   {
     id: '3',
@@ -89,6 +113,18 @@ export const mockProducts: Product[] = [
         images: []
       }
     ],
-    category: { id: 'cat-kids', name: 'Kids', slug: 'kids', parentId: null }
+    category: {
+      id: 'cat-kids',
+      name: 'Kids',
+      slug: 'kids',
+      parentId: null,
+      rootType: 'kids',
+      isActive: true,
+      productCount: 60,
+      order: 3,
+      level: 1,
+      createdAt: '2024-01-03T00:00:00Z',
+      updatedAt: '2024-01-03T00:00:00Z'
+    }
   }
 ];

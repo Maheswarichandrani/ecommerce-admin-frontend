@@ -4,7 +4,7 @@ import { Settings, Sun, Moon, Monitor } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,7 +18,7 @@ export function TopBar() {
     return (
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger className="-ml-1" />
-            
+
 
             <div className="flex flex-1 items-center justify-between">
                 <h2 className="text-lg font-semibold text-foreground hidden sm:block">

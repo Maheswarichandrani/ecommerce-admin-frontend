@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Upload, Check, Image as ImageIcon, Filter } from 'lucide-react';
+import { Search, Upload, Check, Image as ImageIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';

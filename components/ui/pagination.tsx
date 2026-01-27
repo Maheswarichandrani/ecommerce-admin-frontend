@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils/classnames";
 
-interface PaginationProps extends React.HTMLAttributes<nav> { }
+type PaginationProps = React.HTMLAttributes<HTMLElement>;
 
 const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     ({ className, ...props }, ref) => (
@@ -16,7 +16,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
 );
 Pagination.displayName = "Pagination";
 
-const PaginationContent = React.forwardRef<HTMLElement, React.HTMLAttributes<ol>>(
+const PaginationContent = React.forwardRef<HTMLOListElement, React.OlHTMLAttributes<HTMLOListElement>>(
     ({ className, ...props }, ref) => (
         <ol
             ref={ref}

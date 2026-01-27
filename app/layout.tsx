@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Oswald, Scheherazade_New } from "next/font/google";
+import { Montserrat, Scheherazade_New } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 

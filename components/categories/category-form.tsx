@@ -62,7 +62,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 
   const handleImageSelect = (selectedAssets: typeof mockAssets) => {
     if (selectedAssets.length > 0) {
-      setFormData(prev => ({ ...prev, imageUrl: selectedAssets[0].url }));
+      setFormData(prev => ({ ...prev, imageUrl: selectedAssets[0].url ?? undefined }));
     }
   };
 

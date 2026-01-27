@@ -2,8 +2,7 @@
 
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { TopBar } from '@/components/layout/topbar';
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+import { SidebarInset } from "@/components/ui/sidebar";
 
 interface AdminShellProps {
   children: React.ReactNode;

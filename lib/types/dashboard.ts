@@ -11,8 +11,9 @@ export interface ChartDataPoint {
   [key: string]: string | number;
 }
 
-export interface CategoryData {
+export interface CategoryData extends ChartDataPoint {
   name: string;
   value: number;
   color: string;
+  [key: string]: string | number;
 }

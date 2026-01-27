@@ -100,12 +100,16 @@ export function CategoryManagementClient({ initialCategories }: CategoryManageme
     const stats = useMemo(() => calculateStats(categories), [categories]);
 
     // OPTIMIZATION 3: Combined filter + search in single pass
+    // The warning is likely about unnecessary dependency, but categories is used in stats and filteredCategories, so keep as is for correctness.
     const filteredCategories = useMemo(() => {
         const { byId, roots, childrenMap } = normalized;
 
-        // Early return if no filters
-        if (!debouncedSearch && filterType === 'all') {
-            return categories;
+        // Special case: "All" tab shows only root categories (no children)
+        if (filterType === 'all' && !debouncedSearch) {
+            return roots.map(id => {
+                const cat = byId.get(id)!;
+                return { ...cat, children: undefined }; // Strip children for root-only view
+            });
         }
 
         const matchesFilters = (cat: Category): boolean => {
@@ -129,8 +133,14 @@ export function CategoryManagementClient({ initialCategories }: CategoryManageme
         };
 
         const filteredRootIds = filterTree(roots);
+        // For specific type filters (men/women/kids), show full hierarchy
+        if (filterType !== 'all') {
+            return denormalizeCategories(normalized, filteredRootIds);
+        }
+
+        // For "All" with search, show matching results with hierarchy
         return denormalizeCategories(normalized, filteredRootIds);
-    }, [normalized, debouncedSearch, filterType, categories]);
+    }, [normalized, debouncedSearch, filterType]);
 
     // OPTIMIZATION 4: Memoize handlers with useCallback
     const handleCreateNew = useCallback(() => {
