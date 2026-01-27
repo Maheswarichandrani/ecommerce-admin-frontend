@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { ChartDataPoint } from '@/lib/types/dashboard'
+import { ChartDataPoint } from '@/types/dashboard'
 
 interface SalesChartProps {
   data: ChartDataPoint[];

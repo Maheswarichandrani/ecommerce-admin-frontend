@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Order } from '@/lib/types/order';
+import { Order } from '@/types/order';
 import { formatCurrency } from '@/lib/utils/format-currency';
 import { formatDate } from '@/lib/utils/format-date';
 

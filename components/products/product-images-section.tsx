@@ -6,7 +6,7 @@ import { Image as ImageIcon, X, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AssetLibraryModal } from './asset-library-modal';
-import { Asset } from '@/lib/types/asset';
+import { Asset } from '@/types/asset';
 import { useState } from 'react';
 
 interface ProductImagesSectionProps {

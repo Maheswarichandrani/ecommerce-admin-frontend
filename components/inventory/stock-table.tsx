@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Product } from '@/lib/types/product';
+import { Product } from '@/types/product';
 
 interface StockTableProps {
   products: Product[];

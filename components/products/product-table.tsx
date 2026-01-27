@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Product } from '@/lib/types/product';
+import { Product } from '@/types/product';
 import { formatCurrency } from '@/lib/utils/format-currency';
 
 interface ProductTableProps {

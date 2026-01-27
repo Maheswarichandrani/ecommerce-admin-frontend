@@ -2,7 +2,7 @@
 
 import { TrendingUp, TrendingDown, ShoppingCart, DollarSign, Users, AlertCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { MetricData } from '@/lib/types/dashboard';
+import { MetricData } from '@/types/dashboard';
 
 const iconMap = {
   ShoppingCart,
@@ -11,7 +11,7 @@ const iconMap = {
   AlertCircle
 };
 
-interface  MetricsCardsProps {
+interface MetricsCardsProps {
   metrics: MetricData[];
 }
 

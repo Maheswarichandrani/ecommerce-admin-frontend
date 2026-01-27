@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CategoryForm } from '@/components/categories/category-form';
 import { MOCK_CATEGORIES } from '@/lib/mock/category';
-import { CategoryFormData } from '@/lib/types/category';
+import { CategoryFormData } from '@/types/category';
 
 export default function NewCategoryPage() {
     const router = useRouter();

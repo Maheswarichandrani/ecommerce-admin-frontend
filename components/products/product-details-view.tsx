@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Product } from '@/lib/types/product';
+import { Product } from '@/types/product';
 import { formatCurrency } from '@/lib/utils/format-currency';
 import { formatDate } from '@/lib/utils/format-date';
 

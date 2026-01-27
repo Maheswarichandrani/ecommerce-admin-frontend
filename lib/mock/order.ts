@@ -1,4 +1,4 @@
-import { Order, OrderTimeline } from '@/lib/types/order';
+import { Order, OrderTimeline } from '@/types/order';
 
 export const mockOrders: Order[] = [
   {

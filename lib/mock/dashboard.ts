@@ -1,4 +1,4 @@
-import { MetricData, ChartDataPoint, CategoryData } from '@/lib/types/dashboard';
+import { MetricData, ChartDataPoint, CategoryData } from '@/types/dashboard';
 
 export const mockMetrics: MetricData[] = [
   {

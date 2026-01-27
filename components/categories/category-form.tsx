@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Category, CategoryFormData, FormMode, RootType } from '@/lib/types/category';
+import { Category, CategoryFormData, FormMode, RootType } from '@/types/category';
 import { generateSlug, flattenCategories } from '@/lib/utils';
 import { AssetLibraryModal } from '@/components/products/asset-library-modal';
 import { mockAssets } from '@/lib/mock/assets';

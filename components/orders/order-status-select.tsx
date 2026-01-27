@@ -1,7 +1,7 @@
 'use client';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { OrderStatus } from '@/lib/types/order';
+import { OrderStatus } from '@/types/order';
 
 interface OrderStatusSelectProps {
   value: OrderStatus;

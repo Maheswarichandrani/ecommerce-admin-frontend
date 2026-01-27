@@ -8,9 +8,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Product } from '@/lib/types/product';
+import { Product } from '@/types/product';
 import { MOCK_CATEGORIES } from '@/lib/mock/category';
-import { RootType } from '@/lib/types/category';
+import { RootType } from '@/types/category';
 
 interface ProductBasicInfoProps {
   initialData?: Product;

@@ -17,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { User } from '@/lib/types/user';
+import { User } from '@/types/user';
 import { mockUsers } from '@/lib/mock/users';
 
 interface UserDetailsPageProps {
@@ -29,7 +29,7 @@ interface UserDetailsPageProps {
 export default function UserDetailsPage({ params }: UserDetailsPageProps) {
   const router = useRouter();
   const user = mockUsers.find((u) => u.id === decodeURIComponent(params.id));
-  
+
   const [currentUser, setCurrentUser] = useState(user);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [blockDialogOpen, setBlockDialogOpen] = useState(false);
@@ -207,7 +207,7 @@ export default function UserDetailsPage({ params }: UserDetailsPageProps) {
                 Block User
               </Button>
             )}
-            
+
             <Button
               variant="destructive"
               className="w-full gap-2"

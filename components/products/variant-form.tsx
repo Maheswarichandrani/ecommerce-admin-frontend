@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProductImagesSection } from './product-images-section';
-import { Asset } from '@/lib/types/asset';
+import { Asset } from '@/types/asset';
 
 export type VariantFormState = {
   size: string;

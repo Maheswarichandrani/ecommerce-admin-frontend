@@ -6,7 +6,7 @@ import { Sparkles, Info } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Product } from '@/lib/types/product';
+import { Product } from '@/types/product';
 
 interface ProductCustomizationProps {
   initialData?: Product;

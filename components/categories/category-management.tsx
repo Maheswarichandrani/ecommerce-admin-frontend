@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { CategoryNode } from './category-node';
-import { Category, CategoryFilter } from '@/lib/types/category';
+import { Category, CategoryFilter } from '@/types/category';
 import { calculateStats } from '@/lib/utils';
 
 interface CategoryManagementClientProps {

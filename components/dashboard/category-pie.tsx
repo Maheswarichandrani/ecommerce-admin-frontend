@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { CategoryData } from '@/lib/types/dashboard';
+import { CategoryData } from '@/types/dashboard';
 
 interface CategoryPieProps {
   data: CategoryData[];

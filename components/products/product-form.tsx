@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import { ProductBasicInfo } from '@/components/products/product-basic-info';
 import { ProductCustomization } from '@/components/products/product-customization';
 import { ProductVariantsSection } from '@/components/products/product-variant-section';
-import { Asset } from '@/lib/types/asset';
-import { Product } from '@/lib/types/product';
+import { Asset } from '@/types/asset';
+import { Product } from '@/types/product';
 
 interface ProductFormPageProps {
   mode: 'create' | 'edit';

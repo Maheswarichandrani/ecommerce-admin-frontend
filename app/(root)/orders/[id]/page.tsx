@@ -11,7 +11,7 @@ import { formatCurrency } from '@/lib/utils/format-currency';
 import { formatDate } from '@/lib/utils/format-date';
 import { OrderStatusSelect } from '@/components/orders/order-status-select';
 import { mockOrders, mockOrderTimeline, mockCancelledOrderTimeline } from '@/lib/mock/order';
-import { OrderStatus } from '@/lib/types/order';
+import { OrderStatus } from '@/types/order';
 
 export default function OrderDetailPage() {
     const params = useParams();
@@ -101,31 +101,29 @@ export default function OrderDetailPage() {
                             {timeline.map((item, index) => {
                                 const isCompleted = item.completed;
                                 const isCancelledStep = item.status === 'Cancelled';
-                                
+
                                 return (
                                     <div key={index} className="flex flex-col items-center flex-1 relative">
                                         {/* Connecting Line */}
                                         {index < timeline.length - 1 && (
                                             <div className="absolute top-6 left-1/2 w-full h-0.5 -z-10">
-                                                <div className={`h-full ${
-                                                    isCancelledStep 
-                                                        ? 'bg-destructive' 
-                                                        : isCompleted 
-                                                            ? 'bg-green-500' 
+                                                <div className={`h-full ${isCancelledStep
+                                                        ? 'bg-destructive'
+                                                        : isCompleted
+                                                            ? 'bg-green-500'
                                                             : 'bg-border'
-                                                }`} />
+                                                    }`} />
                                             </div>
                                         )}
 
                                         {/* Icon Circle */}
                                         <div
-                                            className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
-                                                isCancelledStep
+                                            className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isCancelledStep
                                                     ? 'border-destructive bg-destructive shadow-lg shadow-destructive/20'
                                                     : isCompleted
                                                         ? 'border-green-500 bg-green-500 shadow-lg shadow-green-200'
                                                         : 'border-border bg-background'
-                                            }`}
+                                                }`}
                                         >
                                             {isCancelledStep ? (
                                                 <XCircle className="w-6 h-6 text-white" />
@@ -138,13 +136,12 @@ export default function OrderDetailPage() {
 
                                         {/* Status Text */}
                                         <div className="mt-4 text-center max-w-[120px]">
-                                            <p className={`font-semibold text-sm mb-1 ${
-                                                isCancelledStep 
-                                                    ? 'text-destructive' 
-                                                    : isCompleted 
-                                                        ? 'text-foreground' 
+                                            <p className={`font-semibold text-sm mb-1 ${isCancelledStep
+                                                    ? 'text-destructive'
+                                                    : isCompleted
+                                                        ? 'text-foreground'
                                                         : 'text-muted-foreground'
-                                            }`}>
+                                                }`}>
                                                 {item.status}
                                             </p>
                                             <p className="text-xs text-muted-foreground">{item.timestamp}</p>

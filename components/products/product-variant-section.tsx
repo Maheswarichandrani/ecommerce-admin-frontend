@@ -7,8 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { VariantForm } from './variant-form';
-import { Product, ProductVariant } from '@/lib/types/product';
-import { Asset } from '@/lib/types/asset';
+import { Product, ProductVariant } from '@/types/product';
+import { Asset } from '@/types/asset';
 
 type VariantFormState = {
   size: string;

@@ -1,4 +1,4 @@
-import { Asset } from '@/lib/types/asset';
+import { Asset } from '@/types/asset';
 
 export const mockAssets: Asset[] = Array.from({ length: 12 }, (_, i) => ({
   id: `asset-${i + 1}`,
