@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Product } from '@/types/product';
-import { formatCurrency } from '@/lib/utils/format-currency';
+import { formatCurrency } from '@/utils/format-currency';
 
 interface ProductTableProps {
   products: Product[];

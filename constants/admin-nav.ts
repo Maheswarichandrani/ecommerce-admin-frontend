@@ -12,14 +12,14 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/admin', section: 'dashboard' },
-  { icon: Package, label: 'Products', path: '/admin/products', section: 'products', children: [{ icon: Package, label: 'All Products', path: '/admin/products' }, { icon: Package, label: 'Add Product', path: '/admin/products/add'}] },
-  { icon: FolderTree, label: 'Categories', path: '/admin/categories', section: 'categories' },
-  { icon: ShoppingCart, label: 'Orders', path: '/admin/orders', section: 'orders' },
-  { icon: Users, label: 'Users', path: '/admin/users', section: 'users' },
-  { icon: Warehouse, label: 'Inventory', path: '/admin/inventory', section: 'inventory' },
-  { icon: CreditCard, label: 'Payments', path: '/admin/payments', section: 'payments' },
-  { icon: Tag, label: 'Offers', path: '/admin/offers', section: 'offers' },
-  { icon: Star, label: 'Reviews', path: '/admin/reviews', section: 'reviews' },
-  { icon: FileText, label: 'Content', path: '/admin/content', section: 'content' },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/', section: 'dashboard' },
+  { icon: Package, label: 'Products', path: '/products', section: 'products', children: [{ icon: Package, label: 'All Products', path: '/products' }, { icon: Package, label: 'Add Product', path: '/products/add'}] },
+  { icon: FolderTree, label: 'Categories', path: '/categories', section: 'categories' },
+  { icon: ShoppingCart, label: 'Orders', path: '/orders', section: 'orders' },
+  { icon: Users, label: 'Users', path: '/users', section: 'users' },
+  { icon: Warehouse, label: 'Inventory', path: '/inventory', section: 'inventory' },
+  { icon: CreditCard, label: 'Payments', path: '/payments', section: 'payments' },
+  { icon: Tag, label: 'Offers', path: '/offers', section: 'offers' },
+  { icon: Star, label: 'Reviews', path: '/reviews', section: 'reviews' },
+  { icon: FileText, label: 'Content', path: '/content', section: 'content' },
 ];

@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { ProductTable } from '@/components/products/product-table';
 import { mockProducts } from '@/lib/mock/products';
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+ 
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">

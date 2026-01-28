@@ -1,28 +1,23 @@
 
-export interface User {
-    id: string; // UUID
-    phone: string;
-    countryCode: string;
-    phoneVerified: boolean;
-    phoneVerifiedAt: string | null; // ISO date string or null
-    email: string;
-    emailVerified: boolean;
-    username: string;
-    role: UserRole;
-    isActive: boolean;
-    createdAt: string; // ISO date string
-    updatedAt: string; // ISO date string
-    failedLoginAttempts: number;
-    lockedUntil: string | null; // ISO date string or null
+export interface AdminUser {
+  id: string;
+  username: string | null;
+  email: string | null;
+  countryCode: string;
+  phone: string;
+  role: UserRole;
+  isActive: boolean;
+  phoneVerified: boolean;
+  emailVerified: boolean;
+  lockedUntil: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type UserRole = 'ADMIN' | 'CUSTOMER';
 
 export interface AuthResponse {
     user: User;
-    accessToken: string;
-    tokenType: string; // typically 'Bearer'
-    expiresIn: number; // in seconds
     message?: string;
 }
 

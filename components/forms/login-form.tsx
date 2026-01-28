@@ -6,14 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { sendOtp } from "@/lib/actions/send-otp";
 import { sendOtpSchema } from "@/lib/validations";
-
-
+import { adminAuthApi } from "@/lib/api/admin-auth.api";
 
 export function LoginForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [phone, setPhone] = useState("");
   const countryCode = "+91"; // Static country code
   const router = useRouter();
 
@@ -26,23 +23,18 @@ export function LoginForm() {
 
       await sendOtpSchema.parseAsync(formValues);
 
-      const result = await sendOtp({
-        phone: formValues.phone,
+      // Call sendOtp API
+      const result = await adminAuthApi.sendOtp({
         countryCode: formValues.countryCode,
+        phone: countryCode + formValues.phone,
       });
 
-      if (result.success) {
-        toast.success(result.data?.message || "OTP sent successfully to your phone");
+      toast.success(result.message || "OTP sent successfully to your phone");
 
-        // Navigate to verify-otp page with phone and countryCode in state
-        router.push(`/verify-otp?phone=${encodeURIComponent(formValues.phone)}&countryCode=${encodeURIComponent(formValues.countryCode)}`);
-        
-        return { ...prevState, error: "", status: "SUCCESS" };
-      }
-
-      toast.error(result.error || "Failed to send OTP");
-
-      return { ...prevState, error: result.error || "Failed to send OTP", status: "ERROR" };
+      // Navigate to verify-otp page with phone and countryCode in state
+      router.push(`/verify-otp?phone=${encodeURIComponent(formValues.phone)}&countryCode=${encodeURIComponent(formValues.countryCode)}`);
+      
+      return { ...prevState, error: "", status: "SUCCESS" };
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
@@ -54,11 +46,13 @@ export function LoginForm() {
         return { ...prevState, error: "Validation failed", status: "ERROR" };
       }
 
-      toast.error("An unexpected error has occurred");
+      // Handle API errors
+      const errorMessage = error instanceof Error ? error.message : "Failed to send OTP";
+      toast.error(errorMessage);
 
       return {
         ...prevState,
-        error: "An unexpected error has occurred",
+        error: errorMessage,
         status: "ERROR",
       };
     }
@@ -90,8 +84,6 @@ export function LoginForm() {
             type="text"
             name="phone"
             placeholder="Enter your phone number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
             disabled={isPending}
             required
             className="pl-16"

@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { otpSchema } from "@/lib/validations";
+import { adminAuthApi } from "@/lib/api/admin-auth.api";
+import { useAdminAuthStore } from "@/store/admin-auth.store";
 
 interface VerifyOtpFormProps {
   phone: string;
@@ -16,8 +17,8 @@ interface VerifyOtpFormProps {
 
 export function VerifyOtpForm({ phone, countryCode }: VerifyOtpFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [otp, setOtp] = useState("");
   const router = useRouter();
+  const { setAdmin } = useAdminAuthStore();
 
   const handleFormSubmit = async (prevState: any, formData: FormData) => {
     try {
@@ -28,25 +29,20 @@ export function VerifyOtpForm({ phone, countryCode }: VerifyOtpFormProps) {
 
       await otpSchema.parseAsync(formValues);
 
-      const result = await signIn("otp-login", {
+      // Call verifyOtp API
+      const result = await adminAuthApi.verifyOtp({
         phone: countryCode + formValues.phone,
         otp: formValues.otp,
-        redirect: false,
       });
 
-      if (result?.error) {
-        toast.error(result.error || "Failed to verify OTP");
-        return { ...prevState, error: result.error, status: "ERROR" };
-      }
+      // Update the auth store with the user data
+      setAdmin(result.user);
 
-      if (result?.ok) {
-        toast.success("Login successful! Redirecting...");
-        router.replace("/");
-        return { ...prevState, error: "", status: "SUCCESS" };
-      }
+      toast.success("Login successful! Redirecting...");
+      router.replace("/");
 
-      toast.error("Failed to verify OTP");
-      return { ...prevState, error: "Failed to verify OTP", status: "ERROR" };
+
+      return { ...prevState, error: "", status: "SUCCESS" };
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors = error.flatten().fieldErrors;
@@ -58,11 +54,13 @@ export function VerifyOtpForm({ phone, countryCode }: VerifyOtpFormProps) {
         return { ...prevState, error: "Validation failed", status: "ERROR" };
       }
 
-      toast.error("An unexpected error has occurred");
+      // Handle API errors
+      const errorMessage = error instanceof Error ? error.message : "Failed to verify OTP";
+      toast.error(errorMessage);
 
       return {
         ...prevState,
-        error: "An unexpected error has occurred",
+        error: errorMessage,
         status: "ERROR",
       };
     }
@@ -106,8 +104,6 @@ export function VerifyOtpForm({ phone, countryCode }: VerifyOtpFormProps) {
           type="text"
           name="otp"
           placeholder="Enter 6-digit OTP"
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
           disabled={isPending}
           required
           maxLength={6}

@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
+import { AdminAuthProvider } from "@/providers/admin-auth-provider";
 
 const scheherazade = Scheherazade_New({
   subsets: ["arabic", "latin"],
@@ -26,11 +27,11 @@ export const metadata: Metadata = {
   description: "Admin Dashboard for The Nala Armoire",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) {  
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -38,11 +39,12 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
         >
-          <SidebarProvider defaultOpen={false}>
-            {children}
-          </SidebarProvider>
+          <AdminAuthProvider>
+            <SidebarProvider defaultOpen={false}>
+              {children}
+            </SidebarProvider>
+          </AdminAuthProvider>
           <Toaster />
         </ThemeProvider>
       </body>

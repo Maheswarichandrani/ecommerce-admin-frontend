@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Order } from '@/types/order';
-import { formatCurrency } from '@/lib/utils/format-currency';
-import { formatDate } from '@/lib/utils/format-date';
+import { formatCurrency } from '@/utils/format-currency';
+import { formatDate } from '@/utils/format-date';
 import { useRouter } from 'next/navigation';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
@@ -165,7 +165,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                     className="gap-1"
                     onClick={(e) => {
                       e.stopPropagation();
-                      router.push(`/admin/orders/${order.id}`);
+                      router.push(`/orders/${order.id}`);
                     }}
                   >
                     <ArrowUpRight className="w-4 h-4" />
