@@ -16,9 +16,9 @@ export default function OrdersPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {orderStatusData.map((status) => (
-          <Card key={status.name} className="admin-metric-card">
-            <div className="admin-metric-title">{status.name}</div>
-            <div className="admin-metric-value text-2xl">{status.value}</div>
+          <Card key={status.name} >
+            <div >{status.name}</div>
+            <div >{status.value}</div>
           </Card>
         ))}
       </div>

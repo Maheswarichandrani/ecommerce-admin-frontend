@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Package, FolderTree, ShoppingCart, Users,
-  Warehouse, CreditCard, Tag, Star, FileText, LucideIcon,
+  Warehouse, Star, FileText, LucideIcon,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -18,8 +18,6 @@ export const NAV_ITEMS: NavItem[] = [
   { icon: ShoppingCart, label: 'Orders', path: '/orders', section: 'orders' },
   { icon: Users, label: 'Users', path: '/users', section: 'users' },
   { icon: Warehouse, label: 'Inventory', path: '/inventory', section: 'inventory' },
-  { icon: CreditCard, label: 'Payments', path: '/payments', section: 'payments' },
-  { icon: Tag, label: 'Offers', path: '/offers', section: 'offers' },
   { icon: Star, label: 'Reviews', path: '/reviews', section: 'reviews' },
   { icon: FileText, label: 'Content', path: '/content', section: 'content' },
 ];

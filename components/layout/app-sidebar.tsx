@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
     Sidebar,
@@ -16,58 +16,17 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
     SidebarRail,
-    SidebarFooter,
 } from "@/components/ui/sidebar";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { NAV_ITEMS } from "@/constants/admin-nav";
-import { ChevronRight, LogOut, User, Settings, ChevronsUpDown } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from "sonner";
-import { useAdminAuthStore } from "@/store/admin-auth.store";
-import { adminAuthApi } from "@/lib/api/admin-auth.api";
-import { getAdminInitials } from "@/lib/auth/admin-auth.utils";
+import { ChevronRight,} from "lucide-react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const pathname = usePathname();
-    const router = useRouter();
-    const [isLoggingOut, setIsLoggingOut] = React.useState(false);
-    const { admin, logout: clearAuth } = useAdminAuthStore();
-
-    const handleLogout = async () => {
-        try {
-            setIsLoggingOut(true);
-            toast.loading("Logging out...", { id: "logout" });
-
-            // Call logout API
-            await adminAuthApi.logout();
-
-            // Clear auth store
-            clearAuth();
-
-            toast.success("Logged out successfully", { id: "logout" });
-            
-            // Redirect to login
-            router.push("/login");
-        } catch (error) {
-            console.error("Logout error:", error);
-            toast.error("Failed to logout", { id: "logout" });
-            setIsLoggingOut(false);
-        }
-    };
-
-
 
     const isActive = (path: string) => {
         if (path === "/admin") return pathname === "/admin";
@@ -174,84 +133,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-
-            <SidebarFooter>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton
-                                    size="lg"
-                                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                                >
-                                    <Avatar className="h-8 w-8 rounded-lg">
-                                        <AvatarImage src="" alt={admin?.username || "Admin"} />
-                                        <AvatarFallback className="rounded-lg bg-primary text-primary-foreground">
-                                            {getAdminInitials(admin)}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div className="grid flex-1 text-left text-sm leading-tight">
-                                        <span className="truncate font-semibold">
-                                            {admin?.username || "Admin User"}
-                                        </span>
-                                        <span className="truncate text-xs text-muted-foreground">
-                                            {admin?.email || admin?.phone || "admin@example.com"}
-                                        </span>
-                                    </div>
-                                    <ChevronsUpDown className="ml-auto size-4" />
-                                </SidebarMenuButton>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                                side="right"
-                                align="end"
-                                sideOffset={4}
-                            >
-                                <DropdownMenuLabel className="p-0 font-normal">
-                                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                        <Avatar className="h-8 w-8 rounded-lg">
-                                            <AvatarImage src="" alt={admin?.username || "Admin"} />
-                                            <AvatarFallback className="rounded-lg bg-primary text-primary-foreground">
-                                                {getAdminInitials (admin)}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div className="grid flex-1 text-left text-sm leading-tight">
-                                            <span className="truncate font-semibold">
-                                                {admin?.username || "Admin User"}
-                                            </span>
-                                            <span className="truncate text-xs text-muted-foreground">
-                                                {admin?.email || admin?.phone || "admin@example.com"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                    <Link href="/profile" className="cursor-pointer">
-                                        <User className="mr-2 h-4 w-4" />
-                                        Profile
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
-                                    <Link href="/settings" className="cursor-pointer">
-                                        <Settings className="mr-2 h-4 w-4" />
-                                        Settings
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                    onClick={handleLogout}
-                                    disabled={isLoggingOut}
-                                    className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400"
-                                >
-                                    <LogOut className="mr-2 h-4 w-4" />
-                                    {isLoggingOut ? "Logging out..." : "Log out"}
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarFooter>
 
             <SidebarRail />
         </Sidebar>
