@@ -1,5 +1,3 @@
-'use client';
-
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { TopBar } from '@/components/layout/topbar';
 import { SidebarInset } from "@/components/ui/sidebar";
@@ -14,9 +12,13 @@ export function AdminShell({ children }: AdminShellProps) {
       <AppSidebar />
       <SidebarInset>
         <TopBar />
-        <div className="p-4 pt-0">
-          {children}
-        </div>
+          <div className="
+            px-3 py-4
+            sm:px-4 sm:py-5
+            md:px-6 md:py-6
+          ">
+            {children}
+          </div>
       </SidebarInset>
     </>
   );

@@ -38,6 +38,7 @@ export function validateAdminToken(token: string): AdminTokenPayload | null {
       console.error('[AdminAuth] Invalid token type:', decoded.type);
       return null;
     }
+
     
     // Validate expiration
     const now = Math.floor(Date.now() / 1000);

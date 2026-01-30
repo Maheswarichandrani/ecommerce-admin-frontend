@@ -1,4 +1,4 @@
-import { ProductGridSkeleton } from '@/components/common/skeleton-loaders';
+import { ProductGridSkeleton } from '@/components/shared/skeleton-loaders';
 
 export default function Loading() {
     return <ProductGridSkeleton count={12} />;

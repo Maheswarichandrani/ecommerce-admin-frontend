@@ -4,13 +4,10 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, Settings, UserRound } from "lucide-react";
@@ -18,11 +15,11 @@ import { toast } from "sonner";
 import { useAdminAuthStore } from "@/store/admin-auth.store";
 import { adminAuthApi } from "@/lib/api/admin-auth.api";
 import { getAdminInitials } from "@/lib/auth/admin-auth.utils";
+import { Separator } from "@/components/ui/separator";
 
 export function AdminProfileDropdown() {
     const router = useRouter();
     const [isLoggingOut, setIsLoggingOut] = React.useState(false);
-    const [isOpen, setIsOpen] = React.useState(false);
     const { admin, logout: clearAuth, isLoading } = useAdminAuthStore();
 
     const handleLogout = async () => {
@@ -63,12 +60,11 @@ export function AdminProfileDropdown() {
     }
 
     return (
-        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-            <DropdownMenuTrigger asChild>
+        <HoverCard openDelay={10}>
+            <HoverCardTrigger asChild>
                 <Button 
                     variant="ghost" 
-                    className="flex items-center gap-2 h-auto px-2 py-1.5 hover:bg-accent"
-                    onMouseEnter={() => setIsOpen(true)}
+                    className="flex items-center gap-2 h-auto px-2 py-1.5 hover:bg-accent lg:w-46"
                 >
                     <Avatar className="h-9 w-9 rounded-full">
                         <AvatarImage src="" alt={admin?.username || "Admin"} />
@@ -85,17 +81,16 @@ export function AdminProfileDropdown() {
                         </span>
                     </div>
                 </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-                className="w-56"
+            </HoverCardTrigger>
+            <HoverCardContent
+                className="w-46 -translate-y-2"
                 side="bottom"
                 align="end"
                 sideOffset={8}
-                onMouseLeave={() => setIsOpen(false)}
             >
-                <DropdownMenuLabel className="p-0 font-normal">
-                    <div className="flex items-center gap-3 px-2 py-2">
-                        <Avatar className="h-10 w-10 rounded-full">
+                <div className="space-y-3">
+                    {/* <div className="flex items-center gap-3">
+                        <Avatar className="h-12 w-12 rounded-full">
                             <AvatarImage src="" alt={admin?.username || "Admin"} />
                             <AvatarFallback className="rounded-full bg-primary text-primary-foreground">
                                 {getAdminInitials(admin)}
@@ -105,35 +100,50 @@ export function AdminProfileDropdown() {
                             <span className="text-sm font-semibold">
                                 {admin?.username || "Admin User"}
                             </span>
-                            <span className="text-xs text-muted-foreground text-ellipsis max-w-[60%]">
+                            <span className="text-xs text-muted-foreground">
                                 {admin?.email || admin?.phone || "admin@example.com"}
                             </span>
                         </div>
                     </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                    <Link href="/profile" className="cursor-pointer">
-                        <UserRound className="mr-2 h-4 w-4" />
-                        Profile
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href="/settings" className="cursor-pointer">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Settings
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                    onClick={handleLogout}
-                    disabled={isLoggingOut}
-                    className="cursor-pointer text-red-600 focus:text-red-600 dark:text-red-400"
-                >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    {isLoggingOut ? "Logging out..." : "Log out"}
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                    
+                    <Separator /> */}
+                    
+                    <div className="flex flex-col gap-1">
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start h-auto py-2 px-2"
+                            asChild
+                        >
+                            <Link href="/profile">
+                                <UserRound className="mr-2 h-4 w-4" />
+                                Profile
+                            </Link>
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start h-auto py-2 px-2"
+                            asChild
+                        >
+                            <Link href="/settings">
+                                <Settings className="mr-2 h-4 w-4" />
+                                Settings
+                            </Link>
+                        </Button>
+                        
+                        <Separator className="my-1" />
+                        
+                        <Button
+                            variant="ghost"
+                            className="w-full justify-start h-auto py-2 px-2 text-red-600 hover:text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20"
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                        >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            {isLoggingOut ? "Logging out..." : "Log out"}
+                        </Button>
+                    </div>
+                </div>
+            </HoverCardContent>
+        </HoverCard>
     );
 }

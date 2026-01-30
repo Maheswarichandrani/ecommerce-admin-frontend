@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 import { AdminAuthProvider } from "@/providers/admin-auth-provider";
+import { QueryProvider } from "@/providers/query-provider";
 
 const scheherazade = Scheherazade_New({
   subsets: ["arabic", "latin"],
@@ -37,16 +38,18 @@ export default async function RootLayout({
       <body
         className={`${scheherazade.variable} antialiased ${montserrat.variable}`}
       >
-        <ThemeProvider
-          attribute="class"
-        >
-          <AdminAuthProvider>
-            <SidebarProvider defaultOpen={false}>
-              {children}
-            </SidebarProvider>
-          </AdminAuthProvider>
-          <Toaster />
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+          >
+            <AdminAuthProvider>
+              <SidebarProvider defaultOpen={false}>
+                {children}
+              </SidebarProvider>
+            </AdminAuthProvider>
+            <Toaster />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

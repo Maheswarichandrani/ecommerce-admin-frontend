@@ -6,7 +6,7 @@ import {
     DetailsViewSkeleton,
     StatsCardsSkeleton,
     CategoryTreeSkeleton
-} from '@/components/common/skeleton-loaders';
+} from '@/components/shared/skeleton-loaders';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function SkeletonDemo() {

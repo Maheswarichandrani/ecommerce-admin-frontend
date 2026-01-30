@@ -7,6 +7,11 @@ import { isProtectedRoute, getLoginPath } from '@/lib/auth/admin-route.config';
  * 
  * ⚠️ CLIENT-SIDE ONLY - For browser/client-side requests
  * Handles automatic token refresh and admin-specific error handling
+ * 
+ * 🔧 FIXED: Token refresh race condition resolved
+ * - Uses same axios instance for refresh requests
+ * - Adds small delay for cookie processing
+ * - Properly clears cookies on logout
  */
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
@@ -41,6 +46,16 @@ const processQueue = (error: Error | null) => {
   failedQueue = [];
 };
 
+/**
+ * Clear authentication cookies
+ */
+const clearAuthCookies = () => {
+  if (typeof document !== 'undefined') {
+    document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax';
+    document.cookie = 'refresh_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax';
+  }
+};
+
 // ==================== Request Interceptor ====================
 
 adminApiClient.interceptors.request.use(
@@ -69,6 +84,7 @@ adminApiClient.interceptors.response.use(
 
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
+      _retryCount?: number;
     };
 
     // Handle 401/403 errors with token refresh
@@ -86,6 +102,16 @@ adminApiClient.interceptors.response.use(
         return Promise.reject(error);
       }
 
+      // Prevent infinite retry loops
+      if (originalRequest._retryCount && originalRequest._retryCount >= 3) {
+        if (typeof window !== 'undefined') {
+          toast.error('Authentication Failed', {
+            description: 'Unable to refresh session. Please log in again.',
+          });
+        }
+        return Promise.reject(new Error('Max retry attempts reached'));
+      }
+
       // Queue request if refresh is already in progress
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -96,22 +122,41 @@ adminApiClient.interceptors.response.use(
       }
 
       originalRequest._retry = true;
+      originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
       isRefreshing = true;
 
       try {
-        // Attempt token refresh
-        await axios.post(
-          `${API_BASE_URL}/api/v1/auth/refresh`,
-          {},
-          {
-            withCredentials: true,
-          }
-        );
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Token Refresh] Attempting token refresh...');
+          console.log('[Token Refresh] Original request URL:', originalRequest.url);
+        }
+
+        // ✅ FIX: Use adminApiClient instead of base axios
+        // This ensures cookies are properly handled with the same instance
+        await adminApiClient.post('/api/v1/auth/refresh', {});
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Token Refresh] Token refresh successful');
+        }
+
+        // ✅ FIX: Small delay to ensure browser processes Set-Cookie header
+        // This prevents race condition where next request uses old cookie
+        await new Promise(resolve => setTimeout(resolve, 50));
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Token Refresh] Retrying original request...');
+        }
 
         // Retry all queued requests
         processQueue(null);
+        
+        // Retry original request with new cookies
         return adminApiClient(originalRequest);
       } catch (refreshError) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('[Token Refresh] Token refresh failed:', refreshError);
+        }
+
         // Token refresh failed - logout admin
         processQueue(refreshError as Error);
 
@@ -121,6 +166,9 @@ adminApiClient.interceptors.response.use(
           // Clear admin auth storage
           localStorage.removeItem('admin-auth-storage');
           sessionStorage.clear();
+
+          // ✅ FIX: Clear cookies to avoid redirect loops
+          clearAuthCookies();
 
           // Only redirect if on protected route
           if (isProtectedRoute(currentPath)) {

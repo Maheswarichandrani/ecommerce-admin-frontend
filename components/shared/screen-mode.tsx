@@ -16,9 +16,9 @@ export function ScreenMode() {
       title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
     >
       {isFullscreen ? (
-        <Minimize  className="h-[1.2rem] w-[1.2rem] text-white" />
+        <Minimize size={52} />
       ) : (
-        <Maximize  className="h-[1.2rem] w-[1.2rem] text-white" />
+        <Maximize size={52} />
       )}
     </Button>
   );
