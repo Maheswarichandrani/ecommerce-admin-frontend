@@ -22,7 +22,6 @@ export const adminProductApi = {
    */
   getAllProducts: async (params?: ProductQueryParams): Promise<PagedResponse<ProductListItem>> => {
 
-    console.log('Fetching products with params:', params);
 
     const response = await adminApiClient.get<PagedResponse<ProductListItem>>(
       '/api/v1/admin/products',

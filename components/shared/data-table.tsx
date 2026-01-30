@@ -21,12 +21,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DataTablePagination } from "./data-table-pagination";
+import { cn } from "@/lib/utils";
+import { is } from "zod/v4/locales";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pageCount: number;
   isLoading?: boolean;
+  isFetching?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -34,6 +37,7 @@ export function DataTable<TData, TValue>({
   data,
   pageCount,
   isLoading = false,
+  isFetching = false,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -115,21 +119,23 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
-      {/* Table */}
-      <div className="overflow-hidden rounded-md border">
-        <Table>
-          <TableHeader>
+    <div className="space-y-4 w-full max-w-full overflow-hidden">
+      {/* Table - Horizontal Scroll Container */}
+      <div className="w-full overflow-x-auto rounded-md border">
+        <Table className="min-w-full">
+          <TableHeader className={cn(
+            isFetching && "animate-pulse"
+          )}>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="whitespace-nowrap">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                   </TableHead>
                 ))}
               </TableRow>
@@ -149,7 +155,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="whitespace-nowrap">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}

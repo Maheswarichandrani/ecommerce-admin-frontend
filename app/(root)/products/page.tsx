@@ -22,10 +22,11 @@ export default function ProductsPage() {
   const searchParams = useSearchParams();
   const params = buildProductParams(searchParams);
 
-  const { data, isLoading } = useProducts(params);
+  const { data, isLoading , isFetching } = useProducts(params);
+
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-full overflow-x-hidden">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-sm uppercase font-bold" >Product LIST</h1>
@@ -53,6 +54,7 @@ export default function ProductsPage() {
           </Button>
         </Link>
 
+
         <SearchForm
           search={params.search}
           page={params.page}
@@ -65,6 +67,7 @@ export default function ProductsPage() {
         data={data?.content || []}
         pageCount={data?.totalPages || 0}
         isLoading={isLoading}
+        isFetching={isFetching}
       />
     </div>
   );

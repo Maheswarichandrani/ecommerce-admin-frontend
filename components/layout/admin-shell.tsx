@@ -10,9 +10,10 @@ export function AdminShell({ children }: AdminShellProps) {
   return (
     <>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="overflow-x-hidden">
         <TopBar />
           <div className="
+            w-full max-w-full overflow-x-hidden
             px-3 py-4
             sm:px-4 sm:py-5
             md:px-6 md:py-6
